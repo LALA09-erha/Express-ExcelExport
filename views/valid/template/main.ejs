@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="icon" type="image/x-icon" href="/images/images.png">
+
+    <title><%- title %></title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wraper">
+        <div class="image--container" style="background-image: url('./images/<%- foto %> ');"></div>
+        <div class="login-container__main">
+          <% if(typeof errors !== 'undefined'){ %>
+            <div class="alert" style="text-align: center; color:red;"><% errors.forEach(err => { %>
+              <p><%- err.msg %> </p>
+            <% }) %></div>
+            <% } %> 
+          <% if(typeof msg !== 'undefined'){ %>
+            <div class="alert" style="text-align: center; color:orange">
+              <p><%- msg %> </p>
+
+            </div>
+            
+            <% } %> 
+          <%- body %> 
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
