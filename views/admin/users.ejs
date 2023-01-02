@@ -1,0 +1,42 @@
+<!-- Page Heading -->
+<a href="/users/add" class="btn btn-primary mb-3">Tambah User</a>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Data Users</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Role</th>                        
+                        <th>Action</th>               
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Role</th>         
+                        <th>Action</th>               
+                    </tr>
+                </tfoot>
+                <tbody>
+                    
+                    <% data.forEach(user => { %>
+                        <tr>
+                            <td><%- user.id %> </td>
+                            <td><%- user.email %></td>
+                            <td><%- user.role %></td>
+                            <td><a href="/users/edit/<%- user.id %>" class="btn btn-warning">Edit</a>  <a href="/users/delete/<%- user.id %>" onclick="return confirm('Are U Sure?')" class="btn btn-danger">Delete</a></td>
+                        </tr>            
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

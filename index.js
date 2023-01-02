@@ -7,13 +7,14 @@ app.set('port', process.env.PORT || 3000)
 var routes = require('./routes/routes')
 // to login
 app.use(routes.login);
-// to regist
+// // to regist
 app.use(routes.regist)
-//to home
+// //to home
 app.use(routes.home);
-// to admin
+// // to admin
 app.use(routes.admin);
-
+//to users 
+// app.use(routes.users);
 
 // error handling middleware should be loaded after the loading the routes
 if (app.get('env') === 'development') {

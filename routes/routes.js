@@ -29,7 +29,10 @@ const proseslogin = env.app.post('/proseslogin',env.validator.check('email','Ema
 //proses logout route
 const logout = env.app.post('/logout',validController.logout);
 
-//proses admin route
+// admin route
 const admin = env.app.get('/admin', adminController.index)
 
-module.exports = {login ,home,regist ,proseslogin,prosesregist,logout,admin}
+// users route
+const users = env.app.get('/users' , adminController.users)
+
+module.exports = {login ,home,regist ,proseslogin,prosesregist,logout,admin,users}
