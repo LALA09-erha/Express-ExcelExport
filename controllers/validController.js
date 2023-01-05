@@ -44,7 +44,8 @@ const proseslogin = async (req,res) => {
 
     //cek user
     if(findUser.password == req.body.password){
-        res.cookie('user', findUser.role ,{ expires: new Date(Date.now() + 900000), httpOnly: true })
+        res.cookie('user', findUser.role ,{ expires: new Date(new Date().getTime()+1000*60*60*24*365), httpOnly: true })
+        res.cookie('data', req.body.email)        
         res.redirect('/');
     }else{
         req.session.massage = 'Login Gagal'

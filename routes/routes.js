@@ -35,4 +35,18 @@ const admin = env.app.get('/admin', adminController.index)
 // users route
 const users = env.app.get('/users' , adminController.users)
 
-module.exports = {login ,home,regist ,proseslogin,prosesregist,logout,admin,users}
+// add user route
+const adduser = env.app.get('/adduser', adminController.adduser)
+
+// proses add user route
+const prosesadduser = env.app.post('/prosesadd',env.validator.check('email','Email Tidak Valid').isEmail(),adminController.prosesadd)
+
+//edit user route
+const edituser = env.app.get('/editusers/:id',adminController.edituser)
+
+//proses edit user route
+const prosesedituser = env.app.post('/prosesedituser',adminController.prosesedituser)
+
+const deleteuser = env.app.get('/deleteusers/:id',adminController.deleteuser)
+
+module.exports = {login ,home,regist ,proseslogin,prosesregist,logout,admin,users,adduser,prosesadduser,edituser}
