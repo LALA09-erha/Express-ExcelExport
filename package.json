@@ -32,7 +32,9 @@
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.13.0",
     "mongoose": "^6.8.2",
+    "mysql": "^2.18.1",
     "path": "^0.12.7",
+    "tedious": "^15.1.2",
     "validator": "^13.7.0"
   }
 }
