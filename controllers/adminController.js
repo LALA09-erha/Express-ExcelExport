@@ -1,4 +1,5 @@
 const e = require('connect-flash');
+const { response } = require('express');
 const env = require('./../env')
 const Items = require('./../models/itemModel');
 
@@ -179,43 +180,89 @@ const uploadfile = (req,res) => {
         // membaca file excel
         var workbook = env.xlsx.readFile(path);
         var sheet_name_list = workbook.SheetNames;
-
+        var xlData = env.xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+        //mengambil data dari file exce
+        var items = [];
+        for (i = 0; i < xlData.length; i++) {
+          items.push(xlData[i].namaitem);
+        }
 
         var namaitems = Items.getnamaitem();
         namaitems.then(function (result) {
-          const items = [];
-          // insert result to array items
+          const itemss = [];
+          // insert result to array itemss
           for (const key in result) {
             if (result.hasOwnProperty(key)) {
               const element = result[key];
-              if(items.includes(element.namaitem) == false){
-                items.push(element.namaitem);
+              if(itemss.includes(element.namaitem) == false){
+                itemss.push(element.namaitem);
               }
             }
           }
-          
+          // console.log(items);
+          // check result items  
+          for (i = 0; i < items.length; i++) {
+            // console.log(items[i]);
+            var checknama = Items.updatejumlahitem(items[i]);
+
+            checknama.then(function (result) {
+              //get namaitem di result        
+              if(result.length == 0){
+                // console.log('Data Tidak Ada');
+                 //// save to db 
+                // mengambil data sheet pertama
+                var xlData = env.xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+                // parsing data
+                for (const key in xlData) {
+                  if (xlData.hasOwnProperty(key)) {
+                    const element = xlData[key];
+                    // console.log(element);
+                    var deff = items.filter(x => !itemss.includes(x));
+                    if(deff.includes(element.namaitem) == true){
+
+                    var item = Items.insert(element);
+                    item.then(function (result) {
+                      // console.log(result);
+                    }).catch(function (err) {
+                      console.log('Data Gagal Diupload');
+                    });
+                  }
+                  }  
+                }
+              }else{
+                //mengambil jumlahitem dari result 
+                var jumlahitem = result[0].jumlahitem;
+                
+                //mengambil data sheet pertama
+                var xlData = env.xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+                // parsing data
+                var data = [];
+                for (const key in xlData) {
+                  if (xlData.hasOwnProperty(key)) {
+                    const element = xlData[key];
+                    if(element.namaitem == result[0].namaitem){
+                      jumlahitem = Number(jumlahitem) + Number(element.jumlahitem);
+                      //update jumlah item
+                      var updatejumlah = Items.updatejumlahitemfix(jumlahitem,element.namaitem);
+                      updatejumlah.then(function (result) {
+                        // console.log(result);
+                      }
+                      ).catch(function (err) {
+                        console.log(err);
+                      });
+                    }}
+                }
+              }
+            }).catch(function (err) {
+              console.log(err);
+            });
+          }
+          // console.log(result); 
         }).catch(function (err) {
           console.log(err);
         });
 
-        //save to db 
-        // // mengambil data sheet pertama
-        // var xlData = env.xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-        // // parsing data
-        // var data = [];
-        // for (const key in xlData) {
-        //   if (xlData.hasOwnProperty(key)) {
-        //     const element = xlData[key];
-        //     var item = Items.insert(element);
-        //     item.then(function (result) {
-        //       // console.log('Data Berhasil Diupload');
-        //     }).catch(function (err) {
-        //       // console.log(err);
-        //       console.log('Data Gagal Diupload');
-        //     });
-        //   }  
-        // }
-        req.session.massage = 'File Berhasil Diupload'
+       req.session.massage = 'File Berhasil Diupload'
         return res.redirect('/admin')
       }
     })

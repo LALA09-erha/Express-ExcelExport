@@ -1,5 +1,6 @@
 
 // // import user model
+const { get } = require('http');
 const conn = require('./database/connect');
 
 const findAll = () => {
@@ -43,9 +44,10 @@ const getnamaitem = () => {
     });}
 
 //mengambil jumlah item yanng dipilih
-const getjumlahitem = () => {
+const updatejumlahitemfix = (data,data_2) => {
+    // console.log(data.toString(),data_2);
     return new Promise((resolve, reject) => {
-        conn.query('select jumlahitem from items ', (err, result) => {
+        conn.query('UPDATE items SET jumlahitem=? WHERE namaitem=?',[data.toString(),data_2], (err, result) => {
             if (err) {
                 reject(err);
             } else {
@@ -57,9 +59,10 @@ const getjumlahitem = () => {
 }
 
 //update jumlah item
-const updatejumlahitem = () => {
+const updatejumlahitem = (data) => {    
+    // console.log(data);
     return new Promise((resolve, reject) => {
-        conn.query('select namaitem from items', (err, result) => {
+        conn.query('select * from items where namaitem=?',[data], (err, result) => {
             if (err) {
                 reject(err);
             } else {
@@ -70,4 +73,4 @@ const updatejumlahitem = () => {
 }
 
 
-module.exports = { findAll, insert , getnamaitem ,updatejumlahitem}
+module.exports = { findAll, insert , getnamaitem ,updatejumlahitem,updatejumlahitemfix}
