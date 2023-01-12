@@ -8,12 +8,22 @@ var bodyParser = require('body-parser')
 var errorHandler = require('errorhandler')
 var expressLayouts = require('express-ejs-layouts')
 var validator = require('express-validator')
-var mongoose = require('mongoose');
+var upload = require('express-fileupload')
+var fs = require('fs')
+var xlsx = require('xlsx')
+const csv = require('fast-csv');
+var multer = require('multer')
+const uploadfile = multer({ dest: './public/files/' })
+
+// var mongoose = require('mongoose');
+const mysql = require('mysql')
 var app = express();
 const router = express.Router(); 
 
 
+
 app.use(express.json());
+app.use(upload());
 
 // all environments
 app.set('view engine', 'ejs')
@@ -35,4 +45,4 @@ app.use(
 )
 app.use(flash())
 
-module.exports = { http, express, path, session, bodyParser, errorHandler , app, router, expressLayouts , validator,mongoose}
+module.exports = { http, express, path, session, bodyParser, errorHandler , app, router, expressLayouts , validator,mysql, fs, upload, multer,uploadfile,csv,xlsx}

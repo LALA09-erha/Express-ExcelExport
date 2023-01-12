@@ -47,6 +47,10 @@ const edituser = env.app.get('/editusers/:id',adminController.edituser)
 //proses edit user route
 const prosesedituser = env.app.post('/prosesedituser',adminController.prosesedituser)
 
+//delete user route
 const deleteuser = env.app.get('/deleteusers/:id',adminController.deleteuser)
+
+//upload file route
+const uploadfile = env.app.post('/uploadfile',adminController.uploadfile)
 
 module.exports = {login ,home,regist ,proseslogin,prosesregist,logout,admin,users,adduser,prosesadduser,edituser}

@@ -2,7 +2,7 @@ const env = require('./../env')
 
 const index = (req,res) => {
     //check cookie
-    if(req.cookies.user == 'user'){
+    if(req.cookies.user == 'Guest'){
         return res.render('home/index',{
             title: 'Home',
             layout: 'home/template/main'

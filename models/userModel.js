@@ -1,21 +1,17 @@
-const env = require('./../env')
 
-// schema user 
-const user = env.mongoose.model('user' , {
-    _id: env.mongoose.Schema.Types.ObjectId,
-    email: {
-        type: String,
-        required:true
-    },
-    password : {
-        type: String,
-        required:true
-    },
-    role : {
-        type:String ,
-        required: true
-    }
+// // import user model
+const conn = require('./../models/database/connect');
 
-})
+const find = (req) => {
+    return new Promise((resolve, reject) => {
+        conn.query('SELECT * FROM users WHERE email = ?', [req], (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
 
-module.exports = user;
+}
+module.exports = { find }

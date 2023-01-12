@@ -1,5 +1,6 @@
 // connection to database
 require('./../models/database/connect')
+const e = require('connect-flash');
 const env = require('./../env');
 const User = require('./../models/userModel');
 
@@ -27,6 +28,7 @@ const proseslogin = async (req,res) => {
     const errors  = env.validator.validationResult(req);
     //cek apakah valid email
     if (!errors.isEmpty()) {
+        // res.send(errors.array())
         return res.render('valid/login', {
             title : 'Login',
             layout: 'valid/template/main',
@@ -35,23 +37,40 @@ const proseslogin = async (req,res) => {
         });
       }
     
-    const findUser =  await User.findOne({email:req.body.email})
-    //mencari user berdasarkan email 
-    if(!findUser){
-        req.session.massage = 'Login Gagal'
-        return res.redirect('/login');
-    }
+    //find users from sql User
+    // const find = await User.find({email: req.body.email});
+    
+    const user = User.find(req.body.email);
+    //cek apakah email ada
 
-    //cek user
-    if(findUser.password == req.body.password){
-        res.cookie('user', findUser.role ,{ expires: new Date(new Date().getTime()+1000*60*60*24*365), httpOnly: true })
-        res.cookie('data', req.body.email)        
-        res.redirect('/');
-    }else{
-        req.session.massage = 'Login Gagal'
-        return res.redirect('/login');
-    }
+    user.then((result) => {
+        if(result.length == 0){
+            req.session.massage = 'Login Gagal'
+            return res.redirect('/login')
+        }else{
+            //cek apakah password benar
+            if (req.body.password == result[0].password) {
+                if(result[0].role =='Admin'){
+                    res.cookie('user', result[0].role ,{ expires: new Date(new Date().getTime()+1000*60*60*24*365), httpOnly: true })
+                    res.cookie('data', req.body.email)        
+                    // console.log(req.cookies.user);
+                    res.redirect('/admin');
 
+                }else{
+                    res.cookie('user', result[0].role ,{ expires: new Date(new Date().getTime()+1000*60*60*24*365), httpOnly: true })
+                    res.cookie('data', req.body.email)        
+                    // console.log(req.cookies.user);
+                    res.redirect('/');
+                }
+            }else{
+                req.session.massage = 'Login Gagal!'
+                return res.redirect('/login')
+            }
+}})
+    //cek apakah password benar
+
+    // console.log(user);
+    
 }
 
 //menampilkan halaman register
