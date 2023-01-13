@@ -263,7 +263,7 @@ const uploadfile = (req,res) => {
         });
 
        req.session.massage = 'File Berhasil Diupload'
-        return res.redirect('/admin')
+       return res.redirect('/admin')
       }
     })
 
